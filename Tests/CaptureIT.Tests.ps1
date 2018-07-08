@@ -8,11 +8,12 @@ Describe "$module PowerShell Module Tests" {
 
         It "has the root module $module.psm1" {
             "$here\$module.psm1" | Should exist
+            "$here\$module.psm1" | Should contain "$module.psm1"
         }
 
         It "has the manifest file $module.psd1" {
             "$here\$module.psd1" | should exist
-            "$here\$module.psd1" | Should contain "$module.psm1"
+            "$here\$module.psd1" | Should contain "$module.psd1"
         }
 
         It "$module has functions" {
