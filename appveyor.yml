@@ -21,4 +21,4 @@ build: false
 
 #Kick off the CI/CD pipeline
 test_script:
-- ps: . .\Tests\CaptureIT.Tests.ps1
+- ps: .\Tests\CaptureIT.Tests.ps1
