@@ -3,7 +3,7 @@
 version: 1.0.{build}
 
 #Publish to PowerShell Gallery with this key
- environment:
+environment:
   NuGetApiKey:
     secure: WDLA88mpIaa4q4If+kY8AeJKZr12zjRZmePooBAaT8AxOk9HG+qaA2KFWq+G2vpI
 
