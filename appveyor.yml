@@ -45,7 +45,7 @@ after_test:
             $errorString += "$($res.FailedCount) tests failed.`n"
         }
         # Documentation itself should be up-to-date
-        Update-MarkdownHelp -Path ./docs
+        Update-MarkdownHelp -Path .\docs
         $diff = git diff
         if ($diff) {
             $errorString += "Help is not up-to-date, run Update-MarkdownHelp: $diff`n"
@@ -58,7 +58,7 @@ on_finish:
     - ps: |
         $ErrorActionPreference = 'Stop'
         try {
-            .\build.ps1 -TaskList PublishModule -ApiKey 'WDLA88mpIaa4q4If+kY8AeJKZr12zjRZmePooBAaT8AxOk9HG+qaA2KFWq+G2vpI'
+            .\build.ps1 -PublishModule -ApiKey 'WDLA88mpIaa4q4If+kY8AeJKZr12zjRZmePooBAaT8AxOk9HG+qaA2KFWq+G2vpI'
         }
         catch {
             Write-Host -Foreground Red $_
