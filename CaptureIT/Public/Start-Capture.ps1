@@ -11,9 +11,9 @@
     Milliseconds between screenshot
 .PARAMTER FilePath
     Name and location to save the generated gif
-.EXAMPLE
+.EXAMPLE 1
     Start-Capture -Screen -FilePath "c:\users\msadministrator\Desktop\mynewgif.gif"
-.NOTES
+.NOTES 
     Name: Start-Capture 
     Author: Josh Rickard (MSAdministrator) 
     DateCreated: 07/07/2018
