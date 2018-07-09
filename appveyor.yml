@@ -1,13 +1,14 @@
 # See http://www.appveyor.com/docs/appveyor-yml for many more options
 
+version: 1.0.{build}
+
 #Publish to PowerShell Gallery with this key
-# environment:
-#  NuGetApiKey:
-#    secure: #INTENTIONALLY_BLANK
+ environment:
+  NuGetApiKey:
+    secure: WDLA88mpIaa4q4If+kY8AeJKZr12zjRZmePooBAaT8AxOk9HG+qaA2KFWq+G2vpI
 
 # Allow WMF5 (i.e. PowerShellGallery functionality)
 os: WMF 5
-version: 1.0.{build}
 
 # Skip on updates to the readme.
 # We can force this by adding [skip ci] or [ci skip] anywhere in commit message
@@ -15,10 +16,50 @@ skip_commits:
   message: /updated readme.*|update readme.*s/
 
 install:
-  - cinst pester
+    - ps: |
+        Write-Host "PowerShell Version:" $PSVersionTable.PSVersion.tostring()
+        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+        Install-Module Pester -Force
+        .\build.ps1 -CleanBuild
 
-build: false
+build_script:
+    - ps: |
+        $ErrorActionPreference = 'Stop'
+        Update-Help
+        .\build.ps1 -InstallModule 
 
-#Kick off the CI/CD pipeline
-test_script:
-- ps: .\Tests\CaptureIT.Tests.ps1
+after_test:
+    - ps: |
+        # We run Pester tests in after_test step
+        # we don't want to use test_script
+        # appveyor doesn't run after_test, if tests failed.
+        #
+        # Pester tests produce artifacts in .\out directory
+        $pesterTestResultsFile = ".\TestsResults.xml"
+        $res = Invoke-Pester -Script .\Tests\CaptureIT.Tests.ps1 -OutputFormat NUnitXml -OutputFile $pesterTestResultsFile -PassThru
+        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $pesterTestResultsFile))
+        # Trying to fail the build, if there are problems
+        $errorString = ''
+        # All tests should pass
+        if ($res.FailedCount -gt 0) {
+            $errorString += "$($res.FailedCount) tests failed.`n"
+        }
+        # Documentation itself should be up-to-date
+        Update-MarkdownHelp -Path ./docs
+        $diff = git diff
+        if ($diff) {
+            $errorString += "Help is not up-to-date, run Update-MarkdownHelp: $diff`n"
+        }
+        if ($errorString) {
+            throw $errorString
+        }
+
+on_finish:
+    - ps: |
+        $ErrorActionPreference = 'Stop'
+        try {
+            .\build.ps1 -TaskList PublishModule -ApiKey 'WDLA88mpIaa4q4If+kY8AeJKZr12zjRZmePooBAaT8AxOk9HG+qaA2KFWq+G2vpI'
+        }
+        catch {
+            Write-Host -Foreground Red $_
+        }
