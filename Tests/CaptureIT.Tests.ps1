@@ -38,8 +38,8 @@ $pubFunctions = ('ConvertTo-Gif',
 
 )
 
-$privFunctions = ('New-GifWriterClass',            
-                  'New-ScreenCaptureClass'
+$privFunctions = ('Import-GifWriterClass',            
+                  'Import-ScreenCaptureClass'
 )
 
 $folders = ( 'Public',
