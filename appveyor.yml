@@ -45,8 +45,8 @@ after_test:
             $errorString += "$($res.FailedCount) tests failed.`n"
         }
         # Documentation itself should be up-to-date
-        Import-Module CaptureIT -Force
-        Update-MarkdownHelp .\docs
+        Import-Module "$env:APPVEYOR_BUILD_FOLDER\CaptureIT\CaptureIT\CaptureIT.pm1 -Force
+        Update-MarkdownHelp "$env:APPVEYOR_BUILD_FOLDER\CaptureIT\docs"
         $diff = git diff
         if ($diff) {
             $errorString += "Help is not up-to-date, run Update-MarkdownHelp: $diff`n"
