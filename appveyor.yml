@@ -44,17 +44,7 @@ after_test:
         if ($res.FailedCount -gt 0) {
             $errorString += "$($res.FailedCount) tests failed.`n"
         }
-        # Documentation itself should be up-to-date
-        #Import-Module "$env:APPVEYOR_BUILD_FOLDER\CaptureIT\CaptureIT.psm1" -Force
-        #Update-MarkdownHelp "$env:APPVEYOR_BUILD_FOLDER\docs"
-        #$diff = git diff
-        #if ($diff) {
-        #    $errorString += "Help is not up-to-date, run Update-MarkdownHelp: $diff`n"
-        #}
-        #if ($errorString) {
-        #    throw $errorString
-        #}
-
+        
 on_finish:
     - ps: |
         $ErrorActionPreference = 'Stop'
