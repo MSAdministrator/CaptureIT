@@ -10,8 +10,8 @@ Param (
 
 
 if ($CleanBuild) {
-    If (Test-Path -Path $CaptureITBuildFolder) {
-        Remove-Item -Path $CaptureITBuildFolder -Recurse -Force
+    If (Get-Module -Name CaptureIT) {
+        Remove-Module -Name CaptureIT -Force
     }
 }
 
