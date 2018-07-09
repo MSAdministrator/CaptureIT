@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Start creating your gif
 .DESCRIPTION
@@ -20,6 +20,7 @@
 #>
 function Start-Capture {
     [CmdletBinding(DefaultParameterSetName = 'Parameter Set 1',
+        SupportsShouldProcess = $true,
         PositionalBinding = $false,
         HelpUri = '',
         ConfirmImpact = 'Medium')]
@@ -61,6 +62,7 @@ function Start-Capture {
     $Global:GifFilePath = $FilePath
 
     if ($Screen) {
+        if ($pscmdlet.ShouldProcess("Entire Screen", "Begin Capturing")) {
         try {
             Write-Verbose -Message 'Calling Start-FullScreenCapture'
             Start-FullScreenCapture -Milliseconds $Milliseconds
@@ -80,7 +82,9 @@ function Start-Capture {
             Write-Error -ErrorRecord $Error[0]
         }
     }
+    }
     elseif ($ActiveWindow) {
+        if ($pscmdlet.ShouldProcess("Active Window", "Begin Capturing")) {
         try {
             Write-Verbose -Message 'Calling Start-ActiveWindowCapture'
             Start-ActiveWindowCapture -Milliseconds $Milliseconds
@@ -98,6 +102,7 @@ function Start-Capture {
         catch {
             Write-Error -ErrorRecord $Error[0]
         }
+    }
     }
     else {
         Write-Warning -Message 'Please add a switch to indicate if you want to capture the Full Screen or Active Window'

@@ -21,6 +21,7 @@
 #>
 function Start-FullScreenCapture {
     [CmdletBinding(DefaultParameterSetName = 'Parameter Set 1',
+        SupportsShouldProcess = $true,
         PositionalBinding = $false,
         HelpUri = '',
         ConfirmImpact = 'Medium')]
@@ -50,6 +51,7 @@ function Start-FullScreenCapture {
 
     $varCount = 1
     try {
+        if ($pscmdlet.ShouldProcess("Full Screen", "Capturing")) {
 
         [console]::TreatControlCAsInput = $true
 
@@ -83,6 +85,7 @@ function Start-FullScreenCapture {
                 }
             }
         }
+    }
     }
     catch {
         Write-Error -ErrorRecord $Error[0]
