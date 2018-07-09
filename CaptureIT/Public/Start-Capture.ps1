@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Start creating your gif
 .DESCRIPTION
@@ -59,50 +59,49 @@ function Start-Capture {
         [string]$FilePath
     )
     
-    $Global:GifFilePath = $FilePath
+    $script:GifFilePath = $FilePath
 
     if ($Screen) {
         if ($pscmdlet.ShouldProcess("Entire Screen", "Begin Capturing")) {
-        try {
-            Write-Verbose -Message 'Calling Start-FullScreenCapture'
-            Start-FullScreenCapture -Milliseconds $Milliseconds
-        }
-        catch {
-            Write-Error -Exception $Error[0]
-            exit -1
-        }
+            try {
+                Write-Verbose -Message 'Calling Start-FullScreenCapture'
+                Start-FullScreenCapture -Milliseconds $Milliseconds
+            }
+            catch {
+                Write-Error -Exception $Error[0]
+                exit -1
+            }
 
-        try {
-            Write-Verbose -Message 'Attempting to generate gif'
+            try {
+                Write-Verbose -Message 'Attempting to generate gif'
 
-            ConvertTo-Gif -FilePath $Global:GifFilePath
-            
+                ConvertTo-Gif -FilePath $script:GifFilePath
+            }
+            catch {
+                Write-Error -ErrorRecord $Error[0]
+            }
         }
-        catch {
-            Write-Error -ErrorRecord $Error[0]
-        }
-    }
     }
     elseif ($ActiveWindow) {
         if ($pscmdlet.ShouldProcess("Active Window", "Begin Capturing")) {
-        try {
-            Write-Verbose -Message 'Calling Start-ActiveWindowCapture'
-            Start-ActiveWindowCapture -Milliseconds $Milliseconds
-        }
-        catch {
-            Write-Error -Exception $Error[0]
-            exit -1
-        }
+            try {
+                Write-Verbose -Message 'Calling Start-ActiveWindowCapture'
+                Start-ActiveWindowCapture -Milliseconds $Milliseconds
+            }
+            catch {
+                Write-Error -Exception $Error[0]
+                exit -1
+            }
 
-        try {
-            Write-Verbose -Message 'Attempting to generate gif'
+            try {
+                Write-Verbose -Message 'Attempting to generate gif'
 
-            ConvertTo-Gif -FilePath $Global:GifFilePath
+                ConvertTo-Gif -FilePath $script:GifFilePath
+            }
+            catch {
+                Write-Error -ErrorRecord $Error[0]
+            }
         }
-        catch {
-            Write-Error -ErrorRecord $Error[0]
-        }
-    }
     }
     else {
         Write-Warning -Message 'Please add a switch to indicate if you want to capture the Full Screen or Active Window'

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Capture the Full Screen
 .DESCRIPTION
@@ -53,39 +53,39 @@ function Start-FullScreenCapture {
     try {
         if ($pscmdlet.ShouldProcess("Full Screen", "Capturing")) {
 
-        [console]::TreatControlCAsInput = $true
+            [console]::TreatControlCAsInput = $true
 
-        while ($true) {
-            Write-Progress -Activity 'Full Screen Capture' -Status 'Capturing....'
-            if ([console]::KeyAvailable) {
-                $key = [system.console]::readkey($true)
-                if (($key.modifiers -band [consolemodifiers]"control") -and ($key.key -eq "C")) {
+            while ($true) {
+                Write-Progress -Activity 'Full Screen Capture' -Status 'Capturing....'
+                if ([console]::KeyAvailable) {
+                    $key = [system.console]::readkey($true)
+                    if (($key.modifiers -band [consolemodifiers]"control") -and ($key.key -eq "C")) {
 
-                    Write-Progress -Activity 'Creating GIF' -Status 'Creating....'
-                    ConvertTo-Gif -FilePath $Global:GifFilePath
-                    Write-Progress -Activity 'Creating GIF' -Status 'Complete!'
-                    return
-                }
-                else {
-                    Start-Sleep -Milliseconds $Milliseconds
-            
-                    Write-Verbose "Taking screenshot of the entire screen"
+                        Write-Progress -Activity 'Creating GIF' -Status 'Creating....'
+                        ConvertTo-Gif -FilePath $script:GifFilePath
+                        Write-Progress -Activity 'Creating GIF' -Status 'Complete!'
+                        return
+                    }
+                    else {
+                        Start-Sleep -Milliseconds $Milliseconds
+                
+                        Write-Verbose "Taking screenshot of the entire screen"
 
-                    Write-Verbose -Message 'Saving screenshots of the enter screen'
-                    $TempFileLocation = "$env:TEMP\CaptureIT\ScreenCapture$varCount.$ImageType"
+                        Write-Verbose -Message 'Saving screenshots of the enter screen'
+                        $TempFileLocation = "$env:TEMP\CaptureIT\ScreenCapture$varCount.$ImageType"
 
-                    Write-Verbose -Message "Creating temporary screenshot: $TempFileLocation"
-                    New-Item -Path $TempFileLocation -Force | Out-Null
+                        Write-Verbose -Message "Creating temporary screenshot: $TempFileLocation"
+                        New-Item -Path $TempFileLocation -Force | Out-Null
 
-                    Write-Verbose "Creating Full Screen file: $TempFileLocation"
-                    $ScreenCaptureObject.CaptureScreenToFile($TempFileLocation, ${ImageType})
+                        Write-Verbose "Creating Full Screen file: $TempFileLocation"
+                        $ScreenCaptureObject.CaptureScreenToFile($TempFileLocation, ${ImageType})
 
-                    Write-Debug -Message 'Incremeting varCount by 1'
-                    $varCount++
+                        Write-Debug -Message 'Incremeting varCount by 1'
+                        $varCount++
+                    }
                 }
             }
         }
-    }
     }
     catch {
         Write-Error -ErrorRecord $Error[0]
