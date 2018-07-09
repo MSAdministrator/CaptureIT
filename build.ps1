@@ -46,7 +46,7 @@ if ($PublishModule) {
     If (![string]::IsNullOrEmpty($ApiKey)) {
         $Env:APIKEY = $ApiKey
 
-        Publish-Module -Path "$CaptureITBuildFolder" -Repository PSGallery -NugetApiKey $env:APIKEY -Verbose
+        Publish-Module -Name CaptureIT -Repository PSGallery -NugetApiKey $env:APIKEY -Verbose
     }
     else {
         Write-Warning -Message 'Unable to publish module because no API key was provided'
