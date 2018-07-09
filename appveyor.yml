@@ -45,7 +45,7 @@ after_test:
             $errorString += "$($res.FailedCount) tests failed.`n"
         }
         # Documentation itself should be up-to-date
-        Update-MarkdownHelp -Path .\docs
+        Update-MarkdownHelp -Path ".\docs"
         $diff = git diff
         if ($diff) {
             $errorString += "Help is not up-to-date, run Update-MarkdownHelp: $diff`n"
