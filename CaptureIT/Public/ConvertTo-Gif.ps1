@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Convert a set of images into a GIF
 .DESCRIPTION

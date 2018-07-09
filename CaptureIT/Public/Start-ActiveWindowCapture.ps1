@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Capture the active window
 .DESCRIPTION
@@ -43,7 +43,7 @@ function Start-ActiveWindowCapture {
 
     try {
         Write-Debug -Message 'Getting ScreenCapture Class'
-        $ScreenCaptureObject = New-ScreenCaptureClass -ErrorAction Stop
+        $ScreenCaptureObject = Import-ScreenCaptureClass -ErrorAction Stop
     }
     catch {
         Write-Error -ErrorRecord $Error[0]
