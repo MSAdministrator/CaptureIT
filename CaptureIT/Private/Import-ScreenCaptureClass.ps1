@@ -13,7 +13,7 @@
         Modified Author: Josh Rickard (MSAdministrator)
         Modified Date: 07/07/2018
 #>
-function New-ScreenCaptureClass {
+function Import-ScreenCaptureClass {
     [CmdletBinding(DefaultParameterSetName = 'Parameter Set 1',
         PositionalBinding = $false,
         HelpUri = '',

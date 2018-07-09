@@ -21,6 +21,7 @@
 #>
 function Start-ActiveWindowCapture {
     [CmdletBinding(DefaultParameterSetName = 'Parameter Set 1',
+        SupportsShouldProcess = $true,
         PositionalBinding = $false,
         HelpUri = '',
         ConfirmImpact = 'Medium')]
@@ -43,7 +44,7 @@ function Start-ActiveWindowCapture {
 
     try {
         Write-Debug -Message 'Getting ScreenCapture Class'
-        $ScreenCaptureObject = New-ScreenCaptureClass -ErrorAction Stop
+        $ScreenCaptureObject = Import-ScreenCaptureClass -ErrorAction Stop
     }
     catch {
         Write-Error -ErrorRecord $Error[0]
@@ -51,22 +52,25 @@ function Start-ActiveWindowCapture {
 
     $varCount = 1
     try {
-        while ($true) {
-            Start-Sleep -Milliseconds $Milliseconds
-
-            Write-Verbose "Taking screenshot of the active window"
-
-            Write-Verbose -Message 'Saving screenshots of the active window'
-            $TempFileLocation = "$env:TEMP\CaptureIT\ScreenCapture$varCount.$ImageType"
+        if ($pscmdlet.ShouldProcess("Active Window", "Capturing")) {
             
-            Write-Verbose -Message "Creating temporary screenshot: $TempFileLocation"
-            New-Item -Path $TempFileLocation -Force | Out-Null
+            while ($true) {
+                Start-Sleep -Milliseconds $Milliseconds
 
-            Write-Verbose "Creating activewindow file: $TempFileLocation"
-            $ScreenCaptureObject.CaptureActiveWindowToFile($TempFileLocation, $ImageType)
+                Write-Verbose "Taking screenshot of the active window"
 
-            Write-Debug -Message 'Incremeting varCount by 1'
-            $varCount++
+                Write-Verbose -Message 'Saving screenshots of the active window'
+                $TempFileLocation = "$env:TEMP\CaptureIT\ScreenCapture$varCount.$ImageType"
+            
+                Write-Verbose -Message "Creating temporary screenshot: $TempFileLocation"
+                New-Item -Path $TempFileLocation -Force | Out-Null
+
+                Write-Verbose "Creating activewindow file: $TempFileLocation"
+                $ScreenCaptureObject.CaptureActiveWindowToFile($TempFileLocation, $ImageType)
+
+                Write-Debug -Message 'Incremeting varCount by 1'
+                $varCount++
+            }
         }
     }
     catch {

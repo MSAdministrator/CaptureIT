@@ -46,9 +46,7 @@ function ConvertTo-Gif {
     try {
         Write-Verbose -Message 'Creating GitWriter object'
 
-        $GifWriterObject = New-GifWriterClass
-
-        #$GifWriterObject.DefaultFrameDelay = 1000
+        $GifWriterObject = Import-GifWriterClass
 
         foreach ($image in $ScreenShotImages) {
             [System.Drawing.Image]$imageObject = [System.Drawing.Image]::FromFile("$image")

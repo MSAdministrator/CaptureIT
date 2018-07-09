@@ -8,7 +8,7 @@
 .NOTES
     I borrowed the C# code from somewhere on Stackoverflow but cannot find the link to attribute to
 #>
-function New-GifWriterClass {
+function Import-GifWriterClass {
     [CmdletBinding(DefaultParameterSetName = 'Parameter Set 1',
         PositionalBinding = $false,
         HelpUri = '',
@@ -224,7 +224,7 @@ public class GifWriter
     try {
         Add-Type $GifWriterClass -ReferencedAssemblies 'System.Windows.Forms', 'System.Drawing'
 
-        $GifWriterObject = [GifWriter]::new($global:GifFilePath)
+        $GifWriterObject = [GifWriter]::new($script:GifFilePath)
 
         Write-Debug -Message 'Returning GifWriter object'
 

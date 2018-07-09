@@ -20,6 +20,7 @@
 #>
 function Start-Capture {
     [CmdletBinding(DefaultParameterSetName = 'Parameter Set 1',
+        SupportsShouldProcess = $true,
         PositionalBinding = $false,
         HelpUri = '',
         ConfirmImpact = 'Medium')]
@@ -58,45 +59,48 @@ function Start-Capture {
         [string]$FilePath
     )
     
-    $Global:GifFilePath = $FilePath
+    $script:GifFilePath = $FilePath
 
     if ($Screen) {
-        try {
-            Write-Verbose -Message 'Calling Start-FullScreenCapture'
-            Start-FullScreenCapture -Milliseconds $Milliseconds
-        }
-        catch {
-            Write-Error -Exception $Error[0]
-            exit -1
-        }
+        if ($pscmdlet.ShouldProcess("Entire Screen", "Begin Capturing")) {
+            try {
+                Write-Verbose -Message 'Calling Start-FullScreenCapture'
+                Start-FullScreenCapture -Milliseconds $Milliseconds
+            }
+            catch {
+                Write-Error -Exception $Error[0]
+                exit -1
+            }
 
-        try {
-            Write-Verbose -Message 'Attempting to generate gif'
+            try {
+                Write-Verbose -Message 'Attempting to generate gif'
 
-            ConvertTo-Gif -FilePath $Global:GifFilePath
-            
-        }
-        catch {
-            Write-Error -ErrorRecord $Error[0]
+                ConvertTo-Gif -FilePath $script:GifFilePath
+            }
+            catch {
+                Write-Error -ErrorRecord $Error[0]
+            }
         }
     }
     elseif ($ActiveWindow) {
-        try {
-            Write-Verbose -Message 'Calling Start-ActiveWindowCapture'
-            Start-ActiveWindowCapture -Milliseconds $Milliseconds
-        }
-        catch {
-            Write-Error -Exception $Error[0]
-            exit -1
-        }
+        if ($pscmdlet.ShouldProcess("Active Window", "Begin Capturing")) {
+            try {
+                Write-Verbose -Message 'Calling Start-ActiveWindowCapture'
+                Start-ActiveWindowCapture -Milliseconds $Milliseconds
+            }
+            catch {
+                Write-Error -Exception $Error[0]
+                exit -1
+            }
 
-        try {
-            Write-Verbose -Message 'Attempting to generate gif'
+            try {
+                Write-Verbose -Message 'Attempting to generate gif'
 
-            ConvertTo-Gif -FilePath $Global:GifFilePath
-        }
-        catch {
-            Write-Error -ErrorRecord $Error[0]
+                ConvertTo-Gif -FilePath $script:GifFilePath
+            }
+            catch {
+                Write-Error -ErrorRecord $Error[0]
+            }
         }
     }
     else {
