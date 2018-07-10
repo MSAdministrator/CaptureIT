@@ -44,4 +44,5 @@ test_script:
   - git config --global user.name "MSAdministrator"
   - git config --global core.autocrlf true
   - git config --global core.safecrlf false
+  - ps: write-host "calling build.ps1"
   - ps: . .\build.ps1
