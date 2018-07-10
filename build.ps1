@@ -45,6 +45,10 @@ if ($InstallModule) {
 if ($PublishModule) {
     If (![string]::IsNullOrEmpty($ApiKey)) {
 
+        if (-not(Get-Module -Name CaptureIT)) {
+            Import-Module .\CaptureIT\CaptureIT.psm1
+        }
+        
         $props = @{
             Name = 'CaptureIT'
             Repository = 'PSGallery'
