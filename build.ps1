@@ -43,7 +43,7 @@ else {
 
     # Create new markdown and XML help files
     Write-Host "Building new function documentation" -ForegroundColor Yellow
-    Import-Module -Name "$PSScriptRoot\..\CaptureIT" -Force
+    Import-Module -Name "$PSScriptRoot\CaptureIT" -Force
     New-MarkdownHelp -Module CaptureIT -OutputFolder '.\docs\' -Force
     New-ExternalHelp -Path '.\docs\' -OutputPath '.\CaptureIT\en-US\' -Force
     . .\docs.ps1
