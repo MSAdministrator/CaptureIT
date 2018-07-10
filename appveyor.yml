@@ -40,7 +40,7 @@ test_script:
   - ps: if ($res.FailedCount -gt 0) { throw "$($res.FailedCount) tests failed."}
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GitHubKey):x-oauth-basic@github.com`n"
-  - git config --global user.email "rickardja@live.com
+  - git config --global user.email "MSAdministrator@users.noreply.github.com"
   - git config --global user.name "Josh Rickard"  
   - git config --global core.autocrlf true
   - git config --global core.safecrlf false
