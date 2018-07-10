@@ -44,9 +44,18 @@ if ($InstallModule) {
 
 if ($PublishModule) {
     If (![string]::IsNullOrEmpty($ApiKey)) {
-        $Env:APIKEY = $ApiKey
 
-        Publish-Module -Name CaptureIT -Repository PSGallery -NugetApiKey $env:APIKEY -Verbose
+        $props = @{
+            Name = 'CaptureIT'
+            Repository = 'PSGallery'
+            NuGetApiKey = $ApiKey
+            Tags        = 'GIF', 'Screenshot', 'Record'
+            LicenseUri  = 'https://github.com/MSAdministrator/CaptureIT/blob/master/LICENSE.md'
+            ProjectUri  = 'https://github.com/MSAdministrator/CaptureIT'
+            ReleaseNotes = 'Initial release to the PowerShell Gallery'
+        }
+
+        Publish-Module @props
     }
     else {
         Write-Warning -Message 'Unable to publish module because no API key was provided'
