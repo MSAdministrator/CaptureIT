@@ -31,18 +31,23 @@ function ConvertTo-Gif {
         ]
         [string]$FilePath
     )
-    
-    $ScreenShotImages = (Get-ChildItem -Path "$env:TEMP\CaptureIT\" -Depth 1).FullName
 
-    try{
-        if (-not(Get-ChildItem -Path $FilePath -ErrorAction SilentlyContinue)){
+    if (-not(Get-ChildItem -Path "$env:TEMP\CaptureIT\" -ErrorAction SilentlyContinue)) {
+        Write-Error -Message 'There are no screenshots available to create GIF from'
+        exit -1
+    }
+
+    $ScreenShotImages = (Get-ChildItem -Path "$env:TEMP\CaptureIT\").FullName
+
+    try {
+        if (-not(Get-ChildItem -Path $FilePath -ErrorAction SilentlyContinue)) {
             New-Item -Path $FilePath -Force
         }
     }
-    catch{
+    catch {
         Write-Error -ErrorRecord $Error[0] -RecommendedAction 'Ensure that you have access to create files in the provided filepath location'
     }
-    
+
     try {
         Write-Verbose -Message 'Creating GitWriter object'
 
@@ -54,17 +59,12 @@ function ConvertTo-Gif {
 
             $imageObject = $null
         }
-        
+
         $GifWriterObject.Dispose()
-         
-        $returnObject = @{
-            Gif                = $FilePath
-            'Screenshot Count' = $ScreenShotImages.Count
-        }
-        Write-Output -InputObject $returnObject
+        Write-Output $True
     }
     catch {
         Write-Error -ErrorRecord $Error[0]
         exit -1
-    }    
+    }
 }
