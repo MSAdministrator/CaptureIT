@@ -64,9 +64,9 @@ function Start-Capture {
     try {
         if (Get-ChildItem -Path "$env:TEMP\CaptureIT\" -ErrorAction SilentlyContinue) {
             try {
-                [IO.File]::OpenWrite($file).close(); $true 
+                [IO.File]::OpenWrite($file).close();
             }
-            catch {$false}
+            catch {}
 
             Remove-Item -Path "$env:TEMP\CaptureIT\" -Recurse -Force
         }
