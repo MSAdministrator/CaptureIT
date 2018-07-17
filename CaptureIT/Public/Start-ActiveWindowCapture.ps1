@@ -40,6 +40,7 @@ function Start-ActiveWindowCapture {
         [string]$ImageType = 'png'
     )
 
+    begin {
     Write-Verbose -Message 'Starting Active Window Capture'
 
     try {
@@ -49,7 +50,8 @@ function Start-ActiveWindowCapture {
     catch {
         Write-Error -ErrorRecord $Error[0]
     }
-
+    }
+    process {
     $varCount = 1
     try {
         if ($pscmdlet.ShouldProcess("Active Window", "Capturing")) {
@@ -77,7 +79,25 @@ function Start-ActiveWindowCapture {
         Write-Error -ErrorRecord $Error[0]
         exit -1
     }
-
+    }
+    end {
     Write-Verbose -Message 'Captured Active Window successfully'
     Write-Output $true
+}                       ConvertTo-Gif -FilePath $script:GifFilePath
+                        Write-Progress -Activity 'Creating GIF' -Status 'Complete!'
+                        return
+                    }
+
+                } while ($CKI.Key -ne 'x')
+            }
+        }
+        catch {
+            Write-Error -ErrorRecord $Error[0]
+            exit -1
+        }
+    }
+    end {
+        Write-Verbose -Message 'Captured Active Window successfully'
+        Write-Output $true
+    }
 }
