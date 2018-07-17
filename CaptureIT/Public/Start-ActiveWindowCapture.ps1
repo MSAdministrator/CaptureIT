@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Capture the active window
 .DESCRIPTION
@@ -34,8 +34,8 @@ function Start-ActiveWindowCapture {
 
         # Image type to capture
         [Parameter(
-            Mandatory = $False,
-            ValueFromPipelineByPropertyName = $False)]
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('jpeg', 'png')]
         [string]$ImageType = 'png'
     )
