@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Start creating your gif
 .DESCRIPTION
@@ -19,26 +19,26 @@
     DateCreated: 07/07/2018
 #>
 function Start-Capture {
-    [CmdletBinding(DefaultParameterSetName = 'Parameter Set 1',
+    [CmdletBinding(DefaultParameterSetName = 'screen',
         SupportsShouldProcess = $true,
         PositionalBinding = $false,
         HelpUri = '',
         ConfirmImpact = 'Medium')]
     Param (
-        # Screenshot of the entire screen 
+        # Screenshot of the entire screen
         [Parameter(
-            Mandatory = $False,
+            Mandatory = $false,
             ParameterSetName = "screen",
-            ValueFromPipelineByPropertyName = $True)]
+            ValueFromPipelineByPropertyName = $true)]
         [switch]$Screen,
 
-        # Screenshot of the active window 
+        # Screenshot of the active window
         [Parameter(
-            Mandatory = $False,
+            Mandatory = $false,
             ParameterSetName = "window",
-            ValueFromPipelineByPropertyName = $False)]
+            ValueFromPipelineByPropertyName = $true)]
         [switch]$ActiveWindow,
-   
+
         # Milliseconds between screenshot
         [Parameter(
             Mandatory = $false,
@@ -47,8 +47,8 @@ function Start-Capture {
 
         # Name and location to save the generated gif
         [Parameter(
-            Mandatory = $True,
-            ValueFromPipelineByPropertyName = $True)]
+            Mandatory = $true,
+            ValueFromPipelineByPropertyName = $true)]
         [ValidateScript( {
                 if ($_ -notmatch "(\.gif)") {
                     throw "The file specified in the path argument must be type of gif"
@@ -58,7 +58,7 @@ function Start-Capture {
         ]
         [string]$FilePath
     )
-    
+
     $script:GifFilePath = $FilePath
 
     try {
@@ -82,7 +82,7 @@ function Start-Capture {
                 Start-FullScreenCapture -Milliseconds $Milliseconds
             }
             catch {
-                Write-Error -Exception $Error[0]
+                Write-Error -ErrorRecord $Error[0]
                 exit -1
             }
 
@@ -103,7 +103,7 @@ function Start-Capture {
                 Start-ActiveWindowCapture -Milliseconds $Milliseconds
             }
             catch {
-                Write-Error -Exception $Error[0]
+                Write-Error -ErrorRecord $Error[0]
                 exit -1
             }
 
