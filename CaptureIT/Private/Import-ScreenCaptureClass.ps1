@@ -60,8 +60,8 @@ namespace ScreenShotDemo
       // get the size 
       User32.RECT windowRect = new User32.RECT(); 
       User32.GetWindowRect(handle,ref windowRect); 
-      int width = windowRect.right - windowRect.left; 
-      int height = windowRect.bottom - windowRect.top; 
+      int width = windowRect.right - windowRect.left + 1; 
+      int height = windowRect.bottom - windowRect.top + 1; 
       // create a device context we can copy to 
       IntPtr hdcDest = GDI32.CreateCompatibleDC(hdcSrc); 
       // create a bitmap we can copy it to, 
@@ -88,7 +88,7 @@ namespace ScreenShotDemo
     /// <param name="filename"></param> 
     /// <param name="format"></param> 
     public void CaptureActiveWindowToFile(string filename, ImageFormat format) 
-    { 
+    {
       Image img = CaptureActiveWindow(); 
       img.Save(filename,format); 
     } 

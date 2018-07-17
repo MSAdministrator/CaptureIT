@@ -37,12 +37,25 @@ If you would like to capture the active window, you will need to specify the swi
 Start-Capture -ActiveWindow -FilePath "c:\users\msadministrator\Desktop\mynewgif.gif"
 ```
 
+To stop capturing, you need to press `x` in the running console.  If you do not, it will continually repeat back to you the key you entered until you press `x`.
+
+```output
+Press the 'x' key to stop capturing.
+You pressed the A key.
+Press the 'x' key to stop capturing.
+You pressed the H key.
+Press the 'x' key to stop capturing.
+You pressed the D key.
+Press the 'x' key to stop capturing.
+You pressed the X key.
+```
+
 ## Notes
 
 ```yaml
    Name: CaptureIT
    Created by: Josh Rickard (MSAdministrator)
-   Created Date: 07/07/2018 
+   Created Date: 07/07/2018
 ```
 
 Some of this code was borrowed from Boe Prox's Take-Screenshot PowerShell Function.

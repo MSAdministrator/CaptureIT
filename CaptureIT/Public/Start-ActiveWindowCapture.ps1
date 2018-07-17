@@ -34,50 +34,69 @@ function Start-ActiveWindowCapture {
 
         # Image type to capture
         [Parameter(
-            Mandatory = $False,
-            ValueFromPipelineByPropertyName = $False)]
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('jpeg', 'png')]
         [string]$ImageType = 'png'
     )
 
-    Write-Verbose -Message 'Starting Active Window Capture'
+    begin {
+        Write-Verbose -Message 'Starting Active Window Capture'
 
-    try {
-        Write-Debug -Message 'Getting ScreenCapture Class'
-        $ScreenCaptureObject = Import-ScreenCaptureClass -ErrorAction Stop
-    }
-    catch {
-        Write-Error -ErrorRecord $Error[0]
-    }
-
-    $varCount = 1
-    try {
-        if ($pscmdlet.ShouldProcess("Active Window", "Capturing")) {
-            
-            while ($true) {
-                Start-Sleep -Milliseconds $Milliseconds
-
-                Write-Verbose "Taking screenshot of the active window"
-
-                Write-Verbose -Message 'Saving screenshots of the active window'
-                $TempFileLocation = "$env:TEMP\CaptureIT\ScreenCapture$varCount.$ImageType"
-            
-                Write-Verbose -Message "Creating temporary screenshot: $TempFileLocation"
-                New-Item -Path $TempFileLocation -Force | Out-Null
-
-                Write-Verbose "Creating activewindow file: $TempFileLocation"
-                $ScreenCaptureObject.CaptureActiveWindowToFile($TempFileLocation, $ImageType)
-
-                Write-Debug -Message 'Incremeting varCount by 1'
-                $varCount++
-            }
+        try {
+            Write-Debug -Message 'Getting ScreenCapture Class'
+            $ScreenCaptureObject = Import-ScreenCaptureClass -ErrorAction Stop
+        }
+        catch {
+            Write-Error -ErrorRecord $Error[0]
         }
     }
-    catch {
-        Write-Error -ErrorRecord $Error[0]
-        exit -1
-    }
+    process {
+        $varCount = 1
+        try {
+            if ($pscmdlet.ShouldProcess("Active Window", "Capturing")) {
 
-    Write-Verbose -Message 'Captured Active Window successfully'
-    Write-Output $true
+                do {
+                    Write-Output "Press the 'x' key to stop capturing."
+
+                    Write-Verbose "Taking screenshot of the active window"
+
+                    Write-Verbose -Message 'Saving screenshots of the active window'
+                    $TempFileLocation = "$env:TEMP\CaptureIT\ScreenCapture$varCount.$ImageType"
+
+                    Write-Verbose -Message "Creating temporary screenshot: $TempFileLocation"
+                    New-Item -Path $TempFileLocation -Force | Out-Null
+
+                    Write-Verbose "Creating activewindow file: $TempFileLocation"
+                    $ScreenCaptureObject.CaptureActiveWindowToFile($TempFileLocation, $ImageType)
+
+                    Write-Debug -Message 'Incremeting varCount by 1'
+                    $varCount++
+
+                    while ([console]::KeyAvailable -eq $false) {
+                        Start-Sleep -Milliseconds 100
+                    }
+
+                    $CKI = [console]::ReadKey($true)
+                    Write-Output "You pressed the $($CKI.Key) key."
+
+                    if ($CKI.Key -eq 'x') {
+                        Write-Progress -Activity 'Creating GIF' -Status 'Creating....'
+                        ConvertTo-Gif -FilePath $script:GifFilePath
+                        Write-Progress -Activity 'Creating GIF' -Status 'Complete!'
+                        return
+                    }
+
+                } while ($CKI.Key -ne 'x')
+            }
+        }
+        catch {
+            Write-Error -ErrorRecord $Error[0]
+            exit -1
+        }
+    }
+    end {
+        Write-Verbose -Message 'Captured Active Window successfully'
+        Write-Output $true
+    }
 }
