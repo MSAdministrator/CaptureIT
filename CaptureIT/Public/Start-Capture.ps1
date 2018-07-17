@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Start creating your gif
 .DESCRIPTION
@@ -60,6 +60,20 @@ function Start-Capture {
     )
     
     $script:GifFilePath = $FilePath
+
+    try {
+        if (Get-ChildItem -Path "$env:TEMP\CaptureIT\" -ErrorAction SilentlyContinue) {
+            try {
+                [IO.File]::OpenWrite($file).close(); $true 
+            }
+            catch {$false}
+
+            Remove-Item -Path "$env:TEMP\CaptureIT\" -Recurse -Force
+        }
+    }
+    catch {
+        Write-Error -ErrorRecord $Error[0] -RecommendedAction "Please remove stale screenshots from $env:TEMP\CaptureIT\"
+    }
 
     if ($Screen) {
         if ($pscmdlet.ShouldProcess("Entire Screen", "Begin Capturing")) {
